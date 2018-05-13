@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Lms Ruby2" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "Library Management System" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Lms Ruby2" %>">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
@@ -11,8 +11,6 @@
   <body>
     <header>
       <%= render 'layouts/navigation' %>
-      <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
-      <%= link_to('Login', new_user_session_path)  %>  
     </header>
     <main role="main">
        <%= render 'layouts/messages' %>
