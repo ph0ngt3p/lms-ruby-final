@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180513090328) do
+ActiveRecord::Schema.define(version: 20180514092334) do
 
   create_table "book_histories", force: :cascade do |t|
     t.integer "book_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20180513090328) do
     t.integer "user_id"
     t.boolean "is_requested"
     t.integer "requested_by"
+    t.string "cover"
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180513090328) do
     t.string "provider"
     t.string "uid"
     t.boolean "requested_by"
+    t.boolean "admin", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

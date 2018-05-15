@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Library Management System" %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Lms Ruby2" %>">
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
-    <%= csrf_meta_tags %>
-  </head>
-  <body>
-    <header>
-      <%= render 'layouts/navigation' %>
-    </header>
-    <main role="main">
-       <%= render 'layouts/messages' %>
-       <%= yield %>
-    </main>
-  </body>
+<head>
+  <title>Library</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <header class="navbar navbar-fixed-top navbar-default">
+    <div class="container-fluid">
+      <nav>
+        <% if user_signed_in? %>
+        <ul class="nav navbar-nav navbar-left">
+          <% if current_user.admin? %>
+            <%= nav_link "Manage Users", users_path%>
+            <%= nav_link "Manage Books", books_path%>
+          <% end %>
+          <%= nav_link "Search Books", new_search_path%>
+          <% if !current_user.admin %>
+            <%= nav_link "All Books", books_path%>            
+          <% end %>
+          <%= nav_link "My checkout history", check_user_history_path(:data => {:user_id => current_user.id, :book_id => nil})%>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <div style="margin: 15px 0px 0px 20px; float: left">
+            <li style="font-size: 14px"> Welcome, <%= current_user.name %>! </li>
+          </div>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to 'Users', users_path, class: 'nav-link' %></li>
+              <li><%= link_to 'Edit Profile', edit_user_registration_path, class: 'nav-link' %></li>
+              <li class="divider"></li>
+              <li><%= link_to '<i class="glyphicon glyphicon-off"></i> Log out'.html_safe, destroy_user_session_path, method: :delete, :style => "float: left" %></li>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
+      </nav>
+    </div>
+  </header>
+  <br/><br/>
+  <% flash.each do |message_type, message| %>
+  <div class="alert alert-<%= message_type %>"><%= message %></div>
+  <% end %>
+  <div class="container">
+    <%= yield %>
+  </div>
+  <br/>
+  <br/>
+  <%= debug(params) if Rails.env.development? %>
+  <%= debug(session[:user_id]) if Rails.env.development? %>
+
+</body>
 </html>

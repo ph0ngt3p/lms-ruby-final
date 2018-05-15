@@ -97,8 +97,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
-    # @books = Book.paginate_by_sql("select * from books where is_deleted = 'f'", :page => params[:page], :per_page => 10)
+    @books = Book.paginate_by_sql("select * from books where is_deleted = 'f'", :page => params[:page], :per_page => 12)
   end
 
   # GET /books/1
