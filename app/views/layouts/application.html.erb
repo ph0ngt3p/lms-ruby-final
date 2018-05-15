@@ -12,6 +12,7 @@
       <nav>
         <% if user_signed_in? %>
         <ul class="nav navbar-nav navbar-left">
+          <%= link_to image_tag("logo.png", width: 45), home_path, style: 'color: #fff; float: left'%>
           <% if current_user.admin? %>
             <%= nav_link "Manage Users", users_path%>
             <%= nav_link "Manage Books", books_path%>
