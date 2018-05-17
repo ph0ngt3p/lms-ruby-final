@@ -32,14 +32,14 @@
 					<% else %>
 					<td><span class="label label-success">Available</span></td>
 					<%end%>
-					<% if book.is_borrowed && @current_user.is_admin %>
+					<% if book.is_borrowed && current_user.admin? %>
 					<%@user = User.find(book.user_id)%>
 					<td><%=@user.name%> (<%=@user.email %>)</td>
 					<%else%>
 					<td></td>
 					<%end%>
 					<%if current_user.admin? %>
-						<td><%=link_to 'View Checkout History', check_user_history_path(:data => {:user_id => nil, :book_id => book.id}), :class => "btn btn-success", :style => "color: #ffffff"%></td>
+						<td><%=link_to 'View Checkout History', check_user_history_path(user_id: current_user.id, book_id: nil), :class => "btn btn-success", :style => "color: #ffffff"%></td>
 					<td><%= link_to 'Edit', edit_book_path(book), :class => "btn btn-warning", :style => "color: #ffffff" %></td>
 					<%if !book.is_borrowed %>
 					<td><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger", :style => "color: #ffffff" %></td>
@@ -48,14 +48,14 @@
 					<%end%>
 					<%if book.is_borrowed %>
 			
-					  <% if book.user_id == @current_user.id %>
+					  <% if book.user_id == current_user.id %>
 			
 						<td><%= link_to 'Return', return_book_path(:id => book.id), :class => "btn btn-warning", :style => "color: #ffffff"%></td>
 					  <%else%>
 						<% if !book.is_requested %>
 						  <td><%= link_to 'Request Notification', request_book_path(:id => book.id), :class => "btn btn-warning", :style => "color: #ffffff"%></td>
 						<%else%>
-						  <% if book.is_requested && (book.requested_by == @current_user.id) %>          
+						  <% if book.is_requested && (book.requested_by == current_user.id) %>          
 							<td><%= link_to 'Cancel Notification', cancel_request_book_path(:id => book.id), :class => "btn btn-warning", :style => "color: #ffffff"%></td>
 						  <%end%>
 						<%end%>

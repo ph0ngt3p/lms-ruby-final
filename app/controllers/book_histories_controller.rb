@@ -5,7 +5,8 @@ class BookHistoriesController < ApplicationController
   # GET /book_histories.json
   def index
     @book_histories = BookHistory.all
-    @data=params[:data]#params[:id]
+    @book_id=params[:book_id]
+    @user_id=params[:user_id]
   end
 
   # GET /book_histories/1

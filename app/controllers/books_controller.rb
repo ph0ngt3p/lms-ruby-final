@@ -7,7 +7,7 @@ class BooksController < ApplicationController
     logger.debug "Book id passed is #{params[:id]}"
     logger.debug "Book returned by search #{@book.id}"
     @book.is_borrowed=true
-    @book.user_id = session[:user_id]
+    @book.user_id = current_user.id
 
     if @book.save!
       # redirect_to @book, notice: 'Book was successfully borrowed.'
@@ -17,7 +17,7 @@ class BooksController < ApplicationController
       # render json: @book.errors, status: :unprocessable_entity
     end
     #create check_out_history of book #vicky
-    create_book_history params[:id], session[:user_id],Time.now.getlocal
+    create_book_history params[:id], current_user.id, Time.now.getlocal
   end
 
   def create_book_history(book_id, user_id, chk_out_dt)
@@ -34,7 +34,7 @@ class BooksController < ApplicationController
     logger.debug "Book id passed is #{params[:id]}"
     logger.debug "Book returned by search #{@book.id}"
     invalid_return = false
-    if @book.is_borrowed && (@book.user_id != @current_user.id)
+    if @book.is_borrowed && (@book.user_id != current_user.id)
       invalid_return = true
     end
     send_mail = false
@@ -57,7 +57,7 @@ class BooksController < ApplicationController
     if send_mail
       send_email_to_requester(user, @book.title)
     end
-    complete_book_history params[:id],session[:user_id],Time.now.getlocal
+    complete_book_history params[:id], current_user.id, Time.now.getlocal
   end
 
   def send_email_to_requester(user, book_name)
@@ -72,8 +72,8 @@ class BooksController < ApplicationController
 
   def request_book
     @book=Book.find(params[:id])
-    @book.is_requested=true
-    @book.requested_by=session[:user_id]
+    @book.is_requested = true
+    @book.requested_by = current_user.id
     if @book.save!
      render :show, status: :ok, location: @book
     else
@@ -84,8 +84,8 @@ class BooksController < ApplicationController
 
   def cancel_request
     @book=Book.find(params[:id])
-    @book.is_requested=false
-    @book.requested_by=nil
+    @book.is_requested = false
+    @book.requested_by = nil
     if @book.save!
      render :show, status: :ok, location: @book
     else

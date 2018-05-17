@@ -12,7 +12,7 @@
               <th>Author</th>
               <th>Isbn</th>
               <th>Status</th>
-              <%if @current_user.is_admin %>
+              <%if current_user.admin? %>
               <th>Checked out by </th>
               <%end%>
               <th colspan="3"></th>
@@ -31,14 +31,14 @@
               <% else %>
               <td><span class="label label-success">Available</span></td>
               <%end%>
-              <% if book.is_borrowed && @current_user.is_admin %>
+              <% if book.is_borrowed && current_user.admin? %>
               <%@user = User.find(book.user_id)%>
               <td><%=@user.name%> (<%=@user.email %>)</td>
               <%else%>
               <td></td>
               <%end%>
               <td><%= link_to 'Show', book, :class => "btn btn-primary", :style => "color: #ffffff" %></td>
-              <%if @current_user.is_admin? %>
+              <%if current_user.admin? %>
               <td><%= link_to 'Edit', edit_book_path(book), :class => "btn btn-warning", :style => "color: #ffffff" %></td>
               <%if !book.is_borrowed %>
           <td><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger", :style => "color: #ffffff" %></td>
@@ -46,7 +46,7 @@
           <%end%>
               <%end%>
               <%if book.is_borrowed %>
-              <% if book.user_id == @current_user.id %>
+              <% if book.user_id == current_user.id %>
               <td><%= link_to 'Return', return_book_path(:id => book.id), :class => "btn btn-warning", :style => "color: #ffffff"%></td>
               <%else%>
               <% if !book.is_requested %>
