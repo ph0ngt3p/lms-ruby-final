@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'home' => 'home#index', as: :home
+  get '' => 'home#index', as: :home
   root to: 'visitors#index'
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   resources :users

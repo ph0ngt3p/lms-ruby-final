@@ -1,23 +1,23 @@
 <%= form_for @search, html:{class: "pure-form"} do |s| %>
 
-<div class="field">
+<div class="form-group">
   <%= s.label :isbn%><br />
-  <%= s.text_field :isbn%>
+  <%= s.text_field :isbn, :autofocus => true, class: 'form-control' %>
 </div>
 
-<div class="field">
+<div class="form-group">
   <%= s.label :title%><br />
-  <%= s.text_field :title%>
+  <%= s.text_field :title, class: 'form-control'%>
 </div>
 
-<div class="field">
+<div class="form-group">
   <%= s.label :publisher%><br />
-  <%= s.text_field :publisher%>
+  <%= s.text_field :publisher, class: 'form-control'%>
 </div>
 
-<div class="field">
+<div class="form-group">
   <%= s.label :author%><br />
-  <%= s.text_field :author%>
+  <%= s.text_field :author, class: 'form-control'%>
 </div>
 
 <div class="actions"><%= s.submit "Search", class: "btn btn-primary"%></div>

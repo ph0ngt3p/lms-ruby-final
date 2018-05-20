@@ -4,24 +4,20 @@
 
   <div class="row" style="margin-top: 30px">
     <% @books.each do |book| %>
-      <div class="col-sm-4" style="padding: 20px; background: #eff0f1">
-        <div class="row">
-          <div class="col-sm-12"><img width="100%" height="460px" alt="cover" src="<%= book.cover %>"></div>
-          <div class="col-sm-12"><h3 style="height: 60px"><%= link_to book.title, book, :style => "color: #428bca; background: transparent" %></h3></div>
-          <div class="col-sm-12"><p style="color: grey"><%= book.author %></p></div>
+      <div class="col-sm-3" style="padding: 10px 25px;">
+        <div class="row" style="background: #eff0f1; padding: 15px 0; box-shadow: #ddd 0px 5px 5px;">
+          <div class="col-sm-12"><img width="100%" height="300px" alt="cover" src="<%= book.cover %>"></div>
+          <div class="col-sm-12"><h3 style="height: 80px"><%= link_to book.title, book, :style => "color: #428bca; background: transparent" %></h3></div>
+          <div class="col-sm-12"><p style="color: grey; height: 30px"><%= book.author %></p></div>
           <div class="col-sm-12" style="margin-bottom: 5px;">
             <% if book.is_borrowed %>
               <span class="label label-danger">Checked out</span>
             <% else %>
               <span class="label label-success">Available</span>
             <%end%>
-            <% if book.is_borrowed && current_user.admin? %>
-              <%@user = User.find(book.user_id)%>
-              by <%=@user.name%> (<%=@user.email %>)
-            <%end%>
             <%if book.is_borrowed %>
 
-              <% if book.user_id == current_user.id %>
+              <% if user_signed_in? && book.user_id == current_user.id %>
 
                 <%= link_to 'Return', return_book_path(:id => book.id), :class => "btn btn-warning", :style => "color: #ffffff"%>
               <%else%>
@@ -37,21 +33,12 @@
               <%=link_to 'Check out', borrow_book_path(:id => book.id), :class => "btn btn-success", :style => "color: #ffffff"%>
             <%end%>
           </div>
-          <div class="col-sm-12">
-            <%if user_signed_in? && current_user.admin? %>
-              <%=link_to 'View Checkout History', check_user_history_path(user_id: current_user.id, book_id: nil), :class => "btn btn-success", :style => "color: #ffffff"%>
-              <%= link_to 'Edit', edit_book_path(book), :class => "btn btn-warning", :style => "color: #ffffff" %>
-              <%if !book.is_borrowed %>
-                <%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger", :style => "color: #ffffff" %>
-              <%end%>
-            <%end%>
-          </div>
         </div>
       </div>
     <%end%>
   </div>
 
-  <%= will_paginate @books, :style => "font-size: 16px;"%>
+  <%= will_paginate @books, :class => "digg_pagination", :style => "display: flex; justify-content: center; padding-top: 30px"%>
   <br>
   <br><br>
   <%if user_signed_in? && current_user.admin? %>

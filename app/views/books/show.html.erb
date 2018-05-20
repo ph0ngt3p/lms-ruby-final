@@ -1,30 +1,67 @@
 <p id="notice"><%= notice %></p>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th><strong>Title</strong></th>
-      <th><strong>publisher</strong></th>
-      <th><strong>Author</strong></th>
-      <th><strong>Isbn</strong></th>
-      <th><strong>Status</strong></th>
-    </tr>
-  </thead>
-  <tbody>
-
-    <tr>
-      <td><%= @book.title %></td>
-      <td><%= @book.publisher %></td>
-      <td><%= @book.author %></td>
-      <td><%= @book.isbn %></td>
+<div>
+  <div style="padding-top: 20px; float: left; width: 30%">
+    <img height="400px" alt="cover" src="<%= @book.cover %>">
+  </div>
+  <div style="padding-left: 50px; float: left; width: 70%">
+    <h1><%= @book.title %></h1>
+    <span>by <%= @book.author %></span>
+    <hr />
+    <div style="margin-bottom: 10px;">
       <% if @book.is_borrowed %>
-      <td><span class="label label-danger">Checked out</span></td>
+        <span class="label label-danger">Checked out</span>
       <%else%>
-      <td><span class="label label-success">Available</span></td>
+        <span class="label label-success">Available</span>
       <%end%>
-    </table>
-
-    <%if user_signed_in? && current_user.admin? %>
-    <%= link_to 'Edit', edit_book_path(@book), :class => "btn btn-danger", :style => "color: #ffffff" %> | 
+      <% if @book.is_borrowed && user_signed_in? && current_user.admin? %>
+        <%@user = User.find(@book.user_id)%>
+        by <%=@user.name%> (<%=@user.email %>)
+      <%end%>
+    </div>
+    <%if @book.is_borrowed %>
+      <% if user_signed_in?%>
+        <% if @book.user_id == current_user.id %>
+          <%= link_to 'Return', return_book_path(:id => @book.id), :class => "btn btn-warning", :style => "color: #ffffff"%>
+        <%else%>
+          <% if !@book.is_requested %>
+            <%= link_to 'Request Notification', request_book_path(:id => @book.id), :class => "btn btn-warning", :style => "color: #ffffff"%>
+          <%else%>
+            <% if @book.is_requested && (user_signed_in? && @book.requested_by == current_user.id) %>          
+              <%= link_to 'Cancel Notification', cancel_request_book_path(:id => @book.id), :class => "btn btn-warning", :style => "color: #ffffff"%>
+            <%end%>
+          <%end%>
+        <%end%>
+      <%else%>
+        <%= link_to 'Request Notification', request_book_path(:id => @book.id), :class => "btn btn-warning", :style => "color: #ffffff"%>
+      <%end%>
+    <%else%>
+      <%=link_to 'Check out', borrow_book_path(:id => @book.id), :class => "btn btn-success", :style => "color: #ffffff"%>
     <%end%>
-    <%= link_to 'Back', books_path, :class => "btn btn-warning", :style => "color: #ffffff" %>
+    <%if user_signed_in? && current_user.admin? %>
+      <%=link_to 'View Checkout History', check_user_history_path(user_id: current_user.id, book_id: nil), :class => "btn btn-success", :style => "color: #ffffff"%>
+      <%= link_to 'Edit', edit_book_path(@book), :class => "btn btn-warning", :style => "color: #ffffff" %>
+      <%if !@book.is_borrowed %>
+        <%= link_to 'Delete', @book, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger", :style => "color: #ffffff" %>
+      <%end%>
+    <%end%>
+    <hr />
+    <div>
+      <div class="infoBoxRowTitle">Original Title</div>
+      <div class="infoBoxRowItem"><%= @book.title %></div>
+    </div>
+    <div>
+      <div class="infoBoxRowTitle">ISBN</div>
+      <div class="infoBoxRowItem"><%= @book.isbn %></div>
+    </div>
+    <div>
+      <div class="infoBoxRowTitle">Author</div>
+      <div class="infoBoxRowItem"><%= @book.author %></div>
+    </div>
+    <div>
+      <div class="infoBoxRowTitle">Publisher</div>
+      <div class="infoBoxRowItem"><%= @book.publisher %></div>
+    </div>
+    <%= link_to 'Back', books_path, :class => "btn btn-warning", :style => "color: #ffffff; margin-top: 15px" %>
+  </div>
+</div>
