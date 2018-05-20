@@ -19,15 +19,17 @@ pre {
 }
 
 a {
-  color: #000;
-
-  &:visited {
-    color: #666;
-  }
+  font-weight: normal;
+  color: #3b94d9;
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  cursor: pointer;
+  word-wrap: break-word;
 
   &:hover {
-    color: #fff;
-    background-color: #000;
+    text-decoration: underline;
+    color: #428bca;
   }
 }
 
