@@ -22,11 +22,10 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-    puts 'lkfjal;fjaskf: ' + user_params['admin']
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'A message with a confirmation link has been sent to ' + user_params['email'] + '. Please tell the user to activate the account.' }
+        format.html { redirect_to @user, notice: 'A message with a confirmation link has been sent to ' + user_params[:email] + '. Please tell the user to activate the account.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
